@@ -100,3 +100,119 @@
     color: var(--accent-color);
     font-weight: 600;
 }
+
+/* ---------------------------------------------------------------------------
+   小伙伴 / Friends
+   --------------------------------------------------------------------------- */
+
+.friend-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+@media (min-width: 600px) {
+    .friend-grid {
+        grid-template-columns: repeat(auto-fill, minmax(260px, 360px));
+        justify-content: start;
+    }
+}
+
+.friend-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    color: inherit;
+    text-decoration: none;
+    background: var(--card-background);
+    border: 1px solid var(--card-separator-color);
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--shadow-l1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.friend-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-l2);
+}
+
+.friend-avatar {
+    flex: none;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.friend-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.friend-name {
+    color: var(--card-text-color-main);
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.friend-url {
+    color: var(--accent-color);
+    font-size: 0.82rem;
+    overflow-wrap: anywhere;
+}
+
+.friend-desc {
+    margin-top: 0.25rem;
+    color: var(--card-text-color-secondary);
+    font-size: 0.9rem;
+    line-height: 1.55;
+}
+
+/* ---------------------------------------------------------------------------
+   相册 / Album
+   --------------------------------------------------------------------------- */
+
+.album-grid {
+    margin-top: 1.5rem;
+    columns: 1;
+    column-gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .album-grid {
+        columns: 2;
+    }
+}
+
+@media (min-width: 1024px) {
+    .album-grid {
+        columns: 3;
+    }
+}
+
+.album-item {
+    margin: 0 0 1rem;
+    break-inside: avoid;
+}
+
+.album-item a {
+    display: block;
+    border-radius: var(--card-border-radius);
+    overflow: hidden;
+}
+
+.album-item img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--card-border-radius);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.album-item a:hover img {
+    transform: scale(1.02);
+    opacity: 0.94;
+}

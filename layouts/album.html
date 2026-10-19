@@ -1,0 +1,40 @@
+{{ define "body-class" }}article-page{{ end }}
+
+{{ define "main" }}
+<article class="main-article">
+    <header class="article-header">
+        <div class="article-details">
+            <div class="article-title-wrapper">
+                <h1 class="article-title">{{ .Title }}</h1>
+                {{ with .Params.description }}
+                    <h3 class="article-subtitle">{{ . }}</h3>
+                {{ end }}
+            </div>
+        </div>
+    </header>
+
+    <section class="article-content">
+        {{ .Content }}
+
+        <div class="album-grid">
+            {{ range sort (resources.Match "album/*") "Name" }}
+                {{ $alt := .Name | replaceRE "^[0-9]+-" "" | replaceRE "\\.[^.]+$" "" | replaceRE "[-_]" " " }}
+                {{ $small := .Resize "480x" }}
+                {{ $medium := .Resize "900x" }}
+                {{ $large := .Resize "1400x" }}
+                <figure class="album-item">
+                    <a href="{{ .RelPermalink }}" target="_blank" rel="noopener" aria-label="{{ $alt }}">
+                        <img src="{{ $medium.RelPermalink }}"
+                             srcset="{{ $small.RelPermalink }} 480w, {{ $medium.RelPermalink }} 900w, {{ $large.RelPermalink }} 1400w"
+                             sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"
+                             width="{{ $medium.Width }}" height="{{ $medium.Height }}"
+                             loading="lazy" alt="{{ $alt }}">
+                    </a>
+                </figure>
+            {{ end }}
+        </div>
+    </section>
+
+    {{ partial "footer/footer" . }}
+</article>
+{{ end }}
