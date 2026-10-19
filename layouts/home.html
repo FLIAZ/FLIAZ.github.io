@@ -1,0 +1,35 @@
+{{ define "main" }}
+    {{- $paginator := partial "helper/paginator.html" . -}}
+
+    {{- if $paginator.Pages -}}
+        <section class="article-list">
+            {{ range $index, $element := $paginator.Pages }}
+                {{ partial "article-list/default" . }}
+            {{ end }}
+        </section>
+
+        {{- partial "pagination.html" . -}}
+    {{- else -}}
+        <section class="empty-state">
+            {{- if eq .Site.Language.Lang "en" -}}
+                <p class="empty-state__eyebrow">English site</p>
+                <h2>Notes are mostly in Chinese</h2>
+                <p>The full archive is currently written in Chinese. The interface is available in English, and translations may be added over time.</p>
+                <a href="/">Read the Chinese site <span aria-hidden="true">→</span></a>
+            {{- else -}}
+                <h2>这里还没有文章</h2>
+                <p>文章正在整理中，可以先看看关于页。</p>
+                <a href="/about/">关于我 <span aria-hidden="true">→</span></a>
+            {{- end -}}
+        </section>
+    {{- end -}}
+
+    {{- partial "footer/footer" . -}}
+{{ end }}
+
+{{ define "right-sidebar" }}
+    {{- $posts := where .Site.RegularPages "Type" "in" .Site.Params.mainSections -}}
+    {{- if $posts -}}
+        {{ partial "sidebar/right.html" (dict "Context" . "Scope" "homepage") }}
+    {{- end -}}
+{{ end }}

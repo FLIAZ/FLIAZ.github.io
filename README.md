@@ -1,4 +1,4 @@
-# F1iAz · 数字花园
+# F1iAz 的小窝
 
 个人博客，基于 [Hugo](https://gohugo.io/) 和 [Hugo Theme Stack](https://github.com/CaiJimmy/hugo-theme-stack)。
 

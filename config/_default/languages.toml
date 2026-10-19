@@ -8,15 +8,15 @@
     locale = "zh-CN"
     contentDir   = "content"
     weight       = 1
-    title        = "F1iAz · 数字花园"
+    title        = "F1iAz的小窝"
 
     [languages.zh.params]
-        description = "F1iAz 的数字花园：一名网安学生的学习笔记与日常折腾。"
+        description = "F1iAz 的小窝：一名普通网安学生的学习笔记与日常折腾。"
 
         [languages.zh.params.sidebar]
-            avatar   = "img/avatar.png"
+            avatar   = "img/avatar.jpg"
             emoji    = ""
-            subtitle = "一名普通的网安学生，记录学习与折腾。"
+            subtitle = "允许自己做自己，允许一切如其所是"
 
     [[languages.zh.menus.main]]
         name   = "首页"
@@ -71,15 +71,15 @@
     label  = "English"
     locale = "en-US"
     weight       = 2
-    title        = "F1iAz · Digital Garden"
+    title        = "F1iAz's Nest"
 
     [languages.en.params]
-        description = "F1iAz's digital garden — study notes from a cybersecurity student and everyday tinkering."
+        description = "F1iAz's nest — study notes from a cybersecurity student and everyday tinkering."
 
         [languages.en.params.sidebar]
-            avatar   = "img/avatar.png"
+            avatar   = "img/avatar.jpg"
             emoji    = ""
-            subtitle = "A cybersecurity student, logging the journey."
+            subtitle = "Let yourself be yourself, and let everything be as it is."
 
     [[languages.en.menus.main]]
         name   = "Home"

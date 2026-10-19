@@ -56,8 +56,47 @@
     line-height: 1.85;
 }
 
+/* 长命令、payload 在移动端换行，避免横向滚动 */
+.article-content code:not(pre code) {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
 /* 行内代码在深色模式下对比度更好 */
 :root[data-scheme="dark"] .article-content code:not(pre code) {
     background: rgba(94, 234, 212, 0.12);
     color: #99f6e4;
+}
+
+/* 空列表提示（主要用于暂无英文文章的英文首页） */
+.empty-state {
+    padding: 2rem;
+    background: var(--card-background);
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--shadow-l1);
+}
+
+.empty-state__eyebrow {
+    margin: 0 0 0.5rem;
+    color: var(--accent-color);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.empty-state h2 {
+    margin: 0 0 0.75rem;
+    font-size: 1.5rem;
+}
+
+.empty-state p {
+    margin: 0 0 1rem;
+    color: var(--card-text-color-secondary);
+    line-height: 1.75;
+}
+
+.empty-state a {
+    color: var(--accent-color);
+    font-weight: 600;
 }

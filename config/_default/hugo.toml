@@ -9,9 +9,10 @@ defaultContentLanguage         = "zh"
 defaultContentLanguageInSubdir = false
 hasCJKLanguage                 = true
 enableRobotsTXT                = false
+timeZone                       = "Asia/Shanghai"
 
 [pagination]
-    pagerSize = 6
+    pagerSize = 12
 
 [permalinks]
     post = "/p/:slug/"
@@ -20,6 +21,7 @@ enableRobotsTXT                = false
 [markup]
     [markup.goldmark.renderer]
         unsafe = true
+        hardWraps = true
 
     [markup.goldmark.extensions.passthrough]
         enable = true
@@ -31,7 +33,7 @@ enableRobotsTXT                = false
     [markup.tableOfContents]
         startLevel = 2
         endLevel   = 4
-        ordered    = true
+        ordered    = false
 
     [markup.highlight]
         noClasses          = false

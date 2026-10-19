@@ -34,5 +34,8 @@
 {{ end }}
 
 {{ define "right-sidebar" }}
-    {{ partial "sidebar/right.html" (dict "Context" . "Scope" "homepage") }}
+    {{- $posts := where .Site.RegularPages "Type" "in" .Site.Params.mainSections -}}
+    {{- if $posts -}}
+        {{ partial "sidebar/right.html" (dict "Context" . "Scope" "homepage") }}
+    {{- end -}}
 {{ end }}
