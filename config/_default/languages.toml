@@ -1,0 +1,131 @@
+# ---------------------------------------------------------------------------
+# 多语言配置 / Multilingual configuration
+# 中文为默认语言（站点根目录），英文在 /en/ 下
+# ---------------------------------------------------------------------------
+
+[languages.zh]
+    label  = "简体中文"
+    locale = "zh-CN"
+    contentDir   = "content"
+    weight       = 1
+    title        = "F1iAz · 数字花园"
+
+    [languages.zh.params]
+        description = "F1iAz 的数字花园：一名网安学生的学习笔记与日常折腾。"
+
+        [languages.zh.params.sidebar]
+            avatar   = "img/avatar.png"
+            emoji    = ""
+            subtitle = "一名普通的网安学生，记录学习与折腾。"
+
+    [[languages.zh.menus.main]]
+        name   = "首页"
+        url    = "/"
+        weight = 1
+        [languages.zh.menus.main.params]
+            icon = "home"
+
+    [[languages.zh.menus.main]]
+        name   = "归档"
+        url    = "/archives/"
+        weight = 2
+        [languages.zh.menus.main.params]
+            icon = "archives"
+
+    [[languages.zh.menus.main]]
+        name   = "标签"
+        url    = "/tags/"
+        weight = 3
+        [languages.zh.menus.main.params]
+            icon = "tag"
+
+    [[languages.zh.menus.main]]
+        name   = "关于"
+        url    = "/about/"
+        weight = 4
+        [languages.zh.menus.main.params]
+            icon = "user"
+
+    [[languages.zh.menus.main]]
+        name   = "搜索"
+        url    = "/search/"
+        weight = 5
+        [languages.zh.menus.main.params]
+            icon = "search"
+
+    [[languages.zh.menus.social]]
+        identifier = "github"
+        name       = "GitHub"
+        url        = "https://github.com/FLIAZ"
+        [languages.zh.menus.social.params]
+            icon = "brand-github"
+
+    [[languages.zh.menus.social]]
+        identifier = "rss"
+        name       = "RSS"
+        url        = "/index.xml"
+        [languages.zh.menus.social.params]
+            icon = "rss"
+
+[languages.en]
+    label  = "English"
+    locale = "en-US"
+    weight       = 2
+    title        = "F1iAz · Digital Garden"
+
+    [languages.en.params]
+        description = "F1iAz's digital garden — study notes from a cybersecurity student and everyday tinkering."
+
+        [languages.en.params.sidebar]
+            avatar   = "img/avatar.png"
+            emoji    = ""
+            subtitle = "A cybersecurity student, logging the journey."
+
+    [[languages.en.menus.main]]
+        name   = "Home"
+        url    = "/en/"
+        weight = 1
+        [languages.en.menus.main.params]
+            icon = "home"
+
+    [[languages.en.menus.main]]
+        name   = "Archives"
+        url    = "/en/archives/"
+        weight = 2
+        [languages.en.menus.main.params]
+            icon = "archives"
+
+    [[languages.en.menus.main]]
+        name   = "Tags"
+        url    = "/en/tags/"
+        weight = 3
+        [languages.en.menus.main.params]
+            icon = "tag"
+
+    [[languages.en.menus.main]]
+        name   = "About"
+        url    = "/en/about/"
+        weight = 4
+        [languages.en.menus.main.params]
+            icon = "user"
+
+    [[languages.en.menus.main]]
+        name   = "Search"
+        url    = "/en/search/"
+        weight = 5
+        [languages.en.menus.main.params]
+            icon = "search"
+
+    [[languages.en.menus.social]]
+        identifier = "github"
+        name       = "GitHub"
+        url        = "https://github.com/FLIAZ"
+        [languages.en.menus.social.params]
+            icon = "brand-github"
+
+    [[languages.en.menus.social]]
+        identifier = "rss"
+        name       = "RSS"
+        url        = "/en/index.xml"
+        [languages.en.menus.social.params]
+            icon = "rss"

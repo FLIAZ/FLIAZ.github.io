@@ -1,0 +1,10 @@
+# Hugo 构建产物
+public/
+resources/
+.hugo_build.lock
+
+# 系统文件
+.DS_Store
+
+# Hugo JS 构建自动生成
+assets/jsconfig.json

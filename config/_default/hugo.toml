@@ -1,0 +1,56 @@
+# ---------------------------------------------------------------------------
+# Hugo 站点配置 / Site configuration
+# ---------------------------------------------------------------------------
+baseURL = "https://fliaz.github.io/"
+title   = "F1iAz"
+theme   = "hugo-theme-stack"
+
+defaultContentLanguage         = "zh"
+defaultContentLanguageInSubdir = false
+hasCJKLanguage                 = true
+enableRobotsTXT                = false
+
+[pagination]
+    pagerSize = 6
+
+[permalinks]
+    post = "/p/:slug/"
+    page = "/:slug/"
+
+[markup]
+    [markup.goldmark.renderer]
+        unsafe = true
+
+    [markup.goldmark.extensions.passthrough]
+        enable = true
+
+        [markup.goldmark.extensions.passthrough.delimiters]
+            block  = [['\[', '\]'], ['$$', '$$']]
+            inline = [['\(', '\)']]
+
+    [markup.tableOfContents]
+        startLevel = 2
+        endLevel   = 4
+        ordered    = true
+
+    [markup.highlight]
+        noClasses          = false
+        codeFences         = true
+        guessSyntax        = true
+        lineNoStart        = 1
+        lineNos            = false
+        lineNumbersInTable = true
+        tabWidth           = 4
+
+[related]
+    includeNewer = true
+    threshold    = 60
+    toLower      = false
+
+    [[related.indices]]
+        name   = "tags"
+        weight = 100
+
+    [[related.indices]]
+        name   = "categories"
+        weight = 200

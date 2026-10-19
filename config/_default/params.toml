@@ -1,0 +1,62 @@
+# ---------------------------------------------------------------------------
+# 主题参数 / Theme parameters
+# ---------------------------------------------------------------------------
+mainSections   = ["post"]
+rssFullContent = true
+favicon        = "img/favicon.png"
+
+[footer]
+    since      = 2026
+    customText = ""
+
+[dateFormat]
+    published   = ":date_full"
+    lastUpdated = ":date_full"
+
+[article]
+    headingAnchor = true
+    math          = false
+    toc           = true
+    readingTime   = true
+
+    [article.list]
+        showTags = false
+
+    [article.license]
+        enabled = false
+
+    [article.alertIcon]
+        note      = "📝"
+        tip       = "💡"
+        important = "📌"
+        warning   = "⚠️"
+        caution   = "🚨"
+
+[widgets]
+    homepage = [
+        { type = "search" },
+        { type = "archives", params = { limit = 6 } },
+        { type = "categories", params = { limit = 10 } },
+        { type = "tag-cloud", params = { limit = 20 } },
+    ]
+    page = [{ type = "toc" }]
+
+[opengraph.twitter]
+    card = "summary_large_image"
+
+[colorScheme]
+    toggle  = true
+    default = "auto"
+
+[imageProcessing]
+    autoOrient = false
+
+    [imageProcessing.content]
+        widths  = [800, 1600]
+        enabled = true
+
+    [imageProcessing.thumbnail]
+        enabled = true
+
+[comments]
+    enabled = false
