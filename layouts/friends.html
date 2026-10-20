@@ -19,11 +19,20 @@
         <div class="friend-grid">
             {{ range hugo.Data.friends }}
                 {{ $friend := . }}
-                {{ $avatar := resources.Get $friend.avatar }}
+                {{ $avatar := $friend.avatar | default "" }}
+                {{ $placeholder := printf `<span class="friend-avatar friend-avatar--placeholder" aria-hidden="true">%s</span>` (partial "helper/icon" "user") }}
                 <a class="friend-card" href="{{ $friend.url }}" target="_blank" rel="noopener noreferrer">
-                    {{ with $avatar }}
-                        {{ $thumb := .Fill "144x144" }}
-                        <img class="friend-avatar" src="{{ $thumb.RelPermalink }}" width="{{ $thumb.Width }}" height="{{ $thumb.Height }}" alt="{{ $friend.name }}" loading="lazy">
+                    {{ if or (hasPrefix $avatar "http://") (hasPrefix $avatar "https://") }}
+                        <img class="friend-avatar" src="{{ $avatar }}" width="144" height="144" alt="{{ $friend.name }}" loading="lazy" referrerpolicy="no-referrer">
+                    {{ else if $avatar }}
+                        {{ with resources.Get $avatar }}
+                            {{ $thumb := .Fill "144x144" }}
+                            <img class="friend-avatar" src="{{ $thumb.RelPermalink }}" width="{{ $thumb.Width }}" height="{{ $thumb.Height }}" alt="{{ $friend.name }}" loading="lazy">
+                        {{ else }}
+                            {{ $placeholder | safeHTML }}
+                        {{ end }}
+                    {{ else }}
+                        {{ $placeholder | safeHTML }}
                     {{ end }}
                     <span class="friend-info">
                         <span class="friend-name">{{ $friend.name }}</span>
