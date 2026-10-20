@@ -653,11 +653,11 @@ html.album-lightbox-open body {
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: baseline;
-    gap: 0.35rem 0.8rem;
+    gap: 0.4rem 0.8rem;
     margin: 0 0 1.5rem;
-    padding: 0.9rem 1.05rem;
+    padding: 1rem 1.2rem;
     color: var(--card-text-color-secondary);
-    font-size: 0.88rem;
+    font-size: 1.4rem;
     line-height: 1.65;
     background: var(--card-background);
     border: 1px solid var(--card-separator-color);
@@ -667,9 +667,9 @@ html.album-lightbox-open body {
 
 .machine-translation-note__label {
     color: var(--accent-color);
-    font-size: 0.68rem;
+    font-size: 1.05rem;
     font-weight: 700;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
 }
 
