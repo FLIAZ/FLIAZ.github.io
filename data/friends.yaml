@@ -1,6 +1,6 @@
 - name: "Probie"
   url: "https://bprobie.github.io/Blog/"
-  avatar: "https://bprobie.github.io/Image/Blog/logo.png"
+  avatar: "img/probie.png"
   description: "Pwn / Java 开发 / 工具创造"
 
 - name: "Skyneon"
