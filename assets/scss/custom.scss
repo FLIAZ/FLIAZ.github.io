@@ -650,14 +650,14 @@ html.album-lightbox-open body {
 
 /* 自动翻译提示 / Machine translation notice */
 .machine-translation-note {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: auto 1fr;
     align-items: baseline;
-    gap: 0.3rem 0.75rem;
+    gap: 0.35rem 0.8rem;
     margin: 0 0 1.5rem;
-    padding: 0.8rem 1rem;
+    padding: 0.9rem 1.05rem;
     color: var(--card-text-color-secondary);
-    font-size: 0.82rem;
+    font-size: 0.88rem;
     line-height: 1.65;
     background: var(--card-background);
     border: 1px solid var(--card-separator-color);
@@ -674,10 +674,13 @@ html.album-lightbox-open body {
 }
 
 .machine-translation-note p {
+    grid-column: 2;
     margin: 0;
 }
 
 .machine-translation-note a {
+    grid-column: 2;
+    width: fit-content;
     color: var(--accent-color);
     text-decoration: underline;
     text-underline-offset: 2px;
@@ -690,6 +693,11 @@ html.album-lightbox-open body {
 
     .machine-translation-note__label {
         display: block;
-        margin-bottom: 0.2rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .machine-translation-note a {
+        display: inline-block;
+        margin-top: 0.2rem;
     }
 }
