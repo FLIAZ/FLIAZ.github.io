@@ -189,44 +189,461 @@
    相册 / Album
    --------------------------------------------------------------------------- */
 
-.album-grid {
+.album-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.35rem 1.5rem;
     margin-top: 1.5rem;
-    columns: 1;
-    column-gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--card-separator-color);
+    color: var(--card-text-color-secondary);
+    font-size: 0.76rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
 }
 
-@media (min-width: 768px) {
-    .album-grid {
-        columns: 2;
-    }
+.album-count strong {
+    color: var(--accent-color);
+    font-size: 1rem;
+    letter-spacing: 0.04em;
 }
 
-@media (min-width: 1024px) {
-    .album-grid {
-        columns: 3;
-    }
+.album-hint {
+    letter-spacing: 0.02em;
+    text-transform: none;
 }
 
-.album-item {
-    margin: 0 0 1rem;
-    break-inside: avoid;
+.album-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.25rem;
 }
 
-.album-item a {
+.album-frame {
+    position: relative;
+    min-width: 0;
+    margin: 0;
+    padding: 10px 10px 0;
+    text-align: left;
+    background: var(--card-background);
+    border: 1px solid var(--card-separator-color);
+    border-radius: calc(var(--card-border-radius) + 4px);
+    box-shadow: 0 16px 40px -30px rgba(15, 23, 42, 0.55), 0 2px 8px rgba(15, 23, 42, 0.04);
+    animation: album-frame-in 0.65s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation-delay: var(--frame-delay, 0ms);
+    transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.album-frame:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 55px -28px rgba(15, 23, 42, 0.62), 0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+.album-frame--hero {
+    grid-column: 1 / -1;
+    padding: 12px 12px 0;
+}
+
+.album-frame-link {
     display: block;
-    border-radius: var(--card-border-radius);
+    color: inherit;
+    text-decoration: none;
+}
+
+.album-frame-link:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 4px;
+    border-radius: calc(var(--card-border-radius) - 2px);
+}
+
+.album-image-wrap {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 3 / 2;
+    border-radius: calc(var(--card-border-radius) - 2px);
+    background: var(--card-separator-color);
+}
+
+.album-frame--hero .album-image-wrap {
+    aspect-ratio: 16 / 9;
+}
+
+.album-image-wrap img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.45s ease;
+}
+
+.album-frame:hover .album-image-wrap img {
+    transform: scale(1.045);
+    filter: saturate(1.04);
+}
+
+.album-hover {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding: 1rem;
+    background: linear-gradient(180deg, transparent 45%, rgba(4, 10, 16, 0.62) 100%);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+.album-frame:hover .album-hover,
+.album-frame-link:focus-visible .album-hover {
+    opacity: 1;
+}
+
+.album-open-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 0.7rem;
+    color: #fff;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: rgba(8, 15, 22, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 999px;
+    backdrop-filter: blur(8px);
+    transform: translateY(6px);
+    transition: transform 0.35s ease;
+}
+
+.album-frame:hover .album-open-label,
+.album-frame-link:focus-visible .album-open-label {
+    transform: translateY(0);
+}
+
+.album-open-label svg {
+    width: 14px;
+    height: 14px;
+}
+
+.album-caption {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.85rem 0.35rem 0.95rem;
+}
+
+.album-index {
+    color: var(--accent-color);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+}
+
+.album-title {
+    color: var(--card-text-color-main);
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+}
+
+.album-frame--hero .album-caption {
+    padding-top: 1rem;
+    padding-bottom: 1.05rem;
+}
+
+.album-frame--hero .album-title {
+    font-size: 1.05rem;
+}
+
+@keyframes album-frame-in {
+    from {
+        opacity: 0;
+        translate: 0 18px;
+    }
+    to {
+        opacity: 1;
+        translate: 0 0;
+    }
+}
+
+/* 顶层查看器 / Lightbox */
+
+.album-lightbox {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    color: #fff;
+    background: transparent;
+}
+
+.album-lightbox[open] {
+    display: block;
+}
+
+.album-lightbox::backdrop {
+    background: rgba(4, 9, 13, 0.78);
+    backdrop-filter: blur(18px) saturate(0.8);
+}
+
+.album-lightbox[open]::backdrop {
+    animation: album-backdrop-in 0.4s ease both;
+}
+
+.album-lightbox.is-closing::backdrop {
+    animation: album-backdrop-out 0.25s ease both;
+}
+
+.album-lightbox__shell {
+    position: absolute;
+    top: 5.5rem;
+    right: 4.5rem;
+    bottom: 3.5rem;
+    left: 4.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    animation: album-lightbox-in 0.42s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.album-lightbox.is-closing .album-lightbox__shell {
+    animation: album-lightbox-out 0.25s ease both;
+}
+
+.album-lightbox__figure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0;
+    pointer-events: auto;
+}
+
+.album-lightbox__stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 0;
+    max-width: 100%;
+}
+
+.album-lightbox__image {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: calc(100vh - 12rem);
+    background: #0b1118;
+    border-radius: 3px;
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
+    transition: opacity 0.22s ease, transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.album-lightbox__image.is-switching {
+    opacity: 0;
+    transform: scale(0.985);
+}
+
+.album-lightbox__caption {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-top: 1rem;
+    color: rgba(255, 255, 255, 0.68);
+    font-size: 0.76rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.album-lightbox__count {
+    color: #5eead4;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.16em;
+}
+
+.album-lightbox__title {
+    color: #fff;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    text-transform: none;
+}
+
+.album-lightbox__nav,
+.album-lightbox__close {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    color: #fff;
+    cursor: pointer;
+    background: rgba(10, 18, 24, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 50%;
+    backdrop-filter: blur(10px);
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.album-lightbox__nav:hover,
+.album-lightbox__close:hover {
+    background: rgba(255, 255, 255, 0.16);
+}
+
+.album-lightbox__nav:focus-visible,
+.album-lightbox__close:focus-visible {
+    outline: 2px solid #5eead4;
+    outline-offset: 3px;
+}
+
+.album-lightbox__nav {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.album-lightbox__nav:hover {
+    transform: translateY(-50%) scale(1.05);
+}
+
+.album-lightbox__nav--prev {
+    left: 1.25rem;
+}
+
+.album-lightbox__nav--next {
+    right: 1.25rem;
+}
+
+.album-lightbox__close {
+    top: 1.25rem;
+    right: 1.25rem;
+}
+
+.album-lightbox__nav svg,
+.album-lightbox__close svg {
+    width: 22px;
+    height: 22px;
+}
+
+html.album-lightbox-open,
+html.album-lightbox-open body {
     overflow: hidden;
 }
 
-.album-item img {
-    display: block;
-    width: 100%;
-    height: auto;
-    border-radius: var(--card-border-radius);
-    transition: transform 0.3s ease, opacity 0.3s ease;
+@keyframes album-lightbox-in {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.975);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
-.album-item a:hover img {
-    transform: scale(1.02);
-    opacity: 0.94;
+@keyframes album-lightbox-out {
+    from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(8px) scale(0.985);
+    }
+}
+
+@keyframes album-backdrop-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes album-backdrop-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@media (max-width: 1024px) {
+    .album-gallery {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .album-gallery {
+        grid-template-columns: 1fr;
+        gap: 1.15rem;
+    }
+
+    .album-frame--hero .album-image-wrap,
+    .album-image-wrap {
+        aspect-ratio: 4 / 3;
+    }
+
+    .album-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.35rem;
+    }
+
+    .album-lightbox__shell {
+        top: 4.75rem;
+        right: 1rem;
+        bottom: 3rem;
+        left: 1rem;
+    }
+
+    .album-lightbox__image {
+        max-height: calc(100vh - 10rem);
+    }
+
+    .album-lightbox__nav,
+    .album-lightbox__close {
+        width: 42px;
+        height: 42px;
+    }
+
+    .album-lightbox__nav--prev {
+        left: 0.6rem;
+    }
+
+    .album-lightbox__nav--next {
+        right: 0.6rem;
+    }
+
+    .album-lightbox__close {
+        top: 1rem;
+        right: 1rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .album-frame,
+    .album-lightbox__shell,
+    .album-lightbox[open]::backdrop,
+    .album-lightbox.is-closing::backdrop {
+        animation: none;
+    }
+
+    .album-frame,
+    .album-image-wrap img,
+    .album-hover,
+    .album-open-label,
+    .album-lightbox__image {
+        transition: none;
+    }
 }

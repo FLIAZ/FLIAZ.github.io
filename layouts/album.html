@@ -1,6 +1,15 @@
 {{ define "body-class" }}article-page{{ end }}
 
 {{ define "main" }}
+{{ $images := sort (resources.Match "album/*") "Name" }}
+{{ $count := len $images }}
+{{ $isEN := eq .Site.Language.Lang "en" }}
+{{ $viewLabel := cond $isEN "View" "查看" }}
+{{ $hintLabel := cond $isEN "Click a frame to enter the gallery. Use ← → to browse." "点击画框进入展馆，使用 ← → 切换。" }}
+{{ $worksLabel := cond $isEN "works" "幅作品" }}
+{{ $closeLabel := cond $isEN "Close viewer" "关闭查看器" }}
+{{ $prevLabel := cond $isEN "Previous image" "上一张" }}
+{{ $nextLabel := cond $isEN "Next image" "下一张" }}
 <article class="main-article">
     <header class="article-header">
         <div class="article-details">
@@ -16,20 +25,48 @@
     <section class="article-content">
         {{ .Content }}
 
-        <div class="album-grid">
-            {{ range sort (resources.Match "album/*") "Name" }}
-                {{ $alt := .Name | replaceRE "^[0-9]+-" "" | replaceRE "\\.[^.]+$" "" | replaceRE "[-_]" " " }}
-                {{ $small := .Resize "480x" }}
-                {{ $medium := .Resize "900x" }}
-                {{ $large := .Resize "1400x" }}
-                <figure class="album-item">
-                    <a href="{{ .RelPermalink }}" target="_blank" rel="noopener" aria-label="{{ $alt }}">
-                        <img src="{{ $medium.RelPermalink }}"
-                             srcset="{{ $small.RelPermalink }} 480w, {{ $medium.RelPermalink }} 900w, {{ $large.RelPermalink }} 1400w"
-                             sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"
-                             width="{{ $medium.Width }}" height="{{ $medium.Height }}"
-                             loading="lazy" alt="{{ $alt }}">
+        <div class="album-toolbar">
+            <span class="album-count"><strong>{{ printf "%02d" $count }}</strong> {{ $worksLabel }}</span>
+            <span class="album-hint">{{ $hintLabel }}</span>
+        </div>
+
+        <div class="album-gallery">
+            {{ range $index, $image := $images }}
+                {{ $title := $image.Name | path.Base | replaceRE "^[0-9]+-" "" | replaceRE "\\.[^.]+$" "" | replaceRE "[-_]" " " }}
+                {{ $small := $image.Resize "480x" }}
+                {{ $medium := $image.Resize "900x" }}
+                {{ $large := $image.Resize "1400x" }}
+                {{ $sizes := "(max-width: 640px) 92vw, (max-width: 1024px) 45vw, 30vw" }}
+                {{ if eq $index 0 }}
+                    {{ $sizes = "(max-width: 640px) 92vw, (max-width: 1024px) 92vw, 90vw" }}
+                {{ end }}
+                <figure class="album-frame{{ if eq $index 0 }} album-frame--hero{{ end }}" style="--frame-delay: {{ mul $index 45 }}ms;">
+                    <a class="album-frame-link"
+                       href="{{ $image.RelPermalink }}"
+                       target="_blank" rel="noopener"
+                       data-title="{{ $title }}"
+                       data-alt="{{ $title }}"
+                       aria-label="{{ printf "%s: %s" $viewLabel $title }}">
+                        <span class="album-image-wrap">
+                            <img src="{{ $medium.RelPermalink }}"
+                                 srcset="{{ $small.RelPermalink }} 480w, {{ $medium.RelPermalink }} 900w, {{ $large.RelPermalink }} 1400w"
+                                 sizes="{{ $sizes }}"
+                                 width="{{ $medium.Width }}" height="{{ $medium.Height }}"
+                                 loading="lazy" decoding="async" alt="{{ $title }}">
+                            <span class="album-hover" aria-hidden="true">
+                                <span class="album-open-label">
+                                    {{ $viewLabel }}
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M7 17L17 7M9 7h8v8"/>
+                                    </svg>
+                                </span>
+                            </span>
+                        </span>
                     </a>
+                    <figcaption class="album-caption">
+                        <span class="album-index">{{ printf "%02d" (add $index 1) }}</span>
+                        <span class="album-title">{{ $title }}</span>
+                    </figcaption>
                 </figure>
             {{ end }}
         </div>
@@ -37,4 +74,39 @@
 
     {{ partial "footer/footer" . }}
 </article>
+
+<dialog class="album-lightbox" id="album-lightbox" aria-label="{{ cond $isEN "Image viewer" "图片查看器" }}">
+    <button type="button" class="album-lightbox__close" data-close aria-label="{{ $closeLabel }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 6l12 12M18 6L6 18"/>
+        </svg>
+    </button>
+
+    <button type="button" class="album-lightbox__nav album-lightbox__nav--prev" data-prev aria-label="{{ $prevLabel }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6"/>
+        </svg>
+    </button>
+
+    <div class="album-lightbox__shell">
+        <figure class="album-lightbox__figure">
+            <div class="album-lightbox__stage">
+                <img class="album-lightbox__image" alt="" decoding="async">
+            </div>
+            <figcaption class="album-lightbox__caption" aria-live="polite" aria-atomic="true">
+                <span class="album-lightbox__count"></span>
+                <span class="album-lightbox__title"></span>
+            </figcaption>
+        </figure>
+    </div>
+
+    <button type="button" class="album-lightbox__nav album-lightbox__nav--next" data-next aria-label="{{ $nextLabel }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18l6-6-6-6"/>
+        </svg>
+    </button>
+</dialog>
+
+{{ $albumJS := resources.Get "js/album.js" | minify | fingerprint }}
+<script src="{{ $albumJS.RelPermalink }}" defer></script>
 {{ end }}
