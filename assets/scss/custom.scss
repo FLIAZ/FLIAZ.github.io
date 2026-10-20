@@ -647,3 +647,49 @@ html.album-lightbox-open body {
         transition: none;
     }
 }
+
+/* 自动翻译提示 / Machine translation notice */
+.machine-translation-note {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.3rem 0.75rem;
+    margin: 0 0 1.5rem;
+    padding: 0.8rem 1rem;
+    color: var(--card-text-color-secondary);
+    font-size: 0.82rem;
+    line-height: 1.65;
+    background: var(--card-background);
+    border: 1px solid var(--card-separator-color);
+    border-left: 3px solid var(--accent-color);
+    border-radius: var(--card-border-radius);
+}
+
+.machine-translation-note__label {
+    color: var(--accent-color);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.machine-translation-note p {
+    margin: 0;
+}
+
+.machine-translation-note a {
+    color: var(--accent-color);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+    .machine-translation-note {
+        display: block;
+    }
+
+    .machine-translation-note__label {
+        display: block;
+        margin-bottom: 0.2rem;
+    }
+}

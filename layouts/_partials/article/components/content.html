@@ -1,0 +1,15 @@
+{{ if .Params.machine_translated }}
+    <aside class="machine-translation-note" role="note">
+        <span class="machine-translation-note__label">Machine translation</span>
+        <p>This English page was translated automatically from the Chinese original. Some wording may be approximate.</p>
+        {{ $chinese := where .Translations "Lang" "zh" }}
+        {{ with index $chinese 0 }}
+            <a href="{{ .RelPermalink }}">Read the Chinese original</a>
+        {{ end }}
+    </aside>
+{{ end }}
+<section class="article-content">
+    <!-- Refer to https://discourse.gohugo.io/t/responsive-tables-in-markdown/10639/5 -->
+    {{ $wrappedTable := printf "<div class=\"table-wrapper\">${1}</div>" }}
+    {{ .Content | replaceRE "(<table>(?:.|\n)+?</table>)" $wrappedTable | safeHTML }}
+</section>

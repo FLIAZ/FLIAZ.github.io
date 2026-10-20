@@ -9,5 +9,12 @@ resources/
 # Hugo JS 构建自动生成
 assets/jsconfig.json
 
+# 自动翻译缓存（不提交）
+/.translation-cache/
+
+# Python 缓存
+__pycache__/
+*.pyc
+
 # 本地使用手册（只保存在本机，不提交）
 /博客更新手册.md
