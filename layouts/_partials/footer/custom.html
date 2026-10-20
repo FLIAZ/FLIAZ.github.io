@@ -1,0 +1,75 @@
+{{- $isEnglish := eq .Language.Lang "en" -}}
+{{- $backLabel := cond $isEnglish "Back to top" "回到顶部" -}}
+{{- $musicLabel := cond $isEnglish "NetEase Music" "网易云音乐" -}}
+{{- $playlistLabel := cond $isEnglish "Playlist" "歌单" -}}
+{{- $openLabel := cond $isEnglish "Open playlist in a new window" "在新窗口打开歌单" -}}
+
+<div class="site-ambient" aria-hidden="true">
+    <canvas id="term-canvas"></canvas>
+</div>
+
+<div class="custom-cursor" id="custom-cursor" aria-hidden="true">
+    <span class="custom-cursor__dot"></span>
+    <span class="custom-cursor__ring"></span>
+</div>
+
+<button class="back-to-top" id="back-to-top" type="button" aria-label="{{ $backLabel }}" title="{{ $backLabel }}">
+    <svg class="back-to-top__dial" viewBox="0 0 46 46" aria-hidden="true">
+        <circle class="back-to-top__track" cx="23" cy="23" r="20"></circle>
+        <circle class="back-to-top__progress" cx="23" cy="23" r="20"></circle>
+    </svg>
+    <svg class="back-to-top__arrow" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 19V5M6 11l6-6 6 6"></path>
+    </svg>
+</button>
+
+<aside class="music-dock" id="music-dock" aria-label="{{ $musicLabel }}">
+    <button class="music-dock__toggle" id="music-toggle" type="button" aria-expanded="false" aria-controls="music-panel">
+        <span class="music-dock__disc" aria-hidden="true"><span class="music-dock__disc-hole"></span></span>
+        <span class="music-dock__label">{{ $musicLabel }}</span>
+        <svg class="music-dock__chevron" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 15l6-6 6 6"></path>
+        </svg>
+    </button>
+
+    <div class="music-dock__panel" id="music-panel" hidden>
+        <div class="music-dock__header">
+            <div class="music-dock__heading">
+                <span class="music-dock__eyebrow">{{ $playlistLabel }} · 3089080750</span>
+                <strong>{{ $musicLabel }}</strong>
+            </div>
+            <div class="music-dock__actions">
+                <a href="https://music.163.com/#/playlist?id=3089080750" target="_blank" rel="noopener noreferrer" title="{{ $openLabel }}" aria-label="{{ $openLabel }}">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M14 5h5v5M10 14L19 5M19 14v5H5V5h5"></path>
+                    </svg>
+                </a>
+                <button class="music-dock__close" id="music-close" type="button" aria-label="{{ cond $isEnglish "Close music player" "关闭音乐播放器" }}">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M6 6l12 12M18 6L6 18"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="music-dock__player">
+            <iframe
+                class="music-dock__iframe"
+                id="music-iframe"
+                data-src="https://music.163.com/outchain/player?type=0&amp;id=3089080750&amp;auto=0&amp;height=430"
+                width="330"
+                height="430"
+                frameborder="0"
+                border="0"
+                marginwidth="0"
+                marginheight="0"
+                loading="lazy"
+                allow="autoplay; encrypted-media"
+                title="{{ $musicLabel }} · 3089080750"
+            ></iframe>
+            <div class="music-dock__loading" id="music-loading" aria-hidden="true">
+                <span class="music-dock__spinner"></span>
+                <span>{{ cond $isEnglish "Loading playlist…" "正在加载歌单…" }}</span>
+            </div>
+        </div>
+    </div>
+</aside>

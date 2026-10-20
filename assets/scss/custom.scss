@@ -701,3 +701,583 @@ html.album-lightbox-open body {
         margin-top: 0.2rem;
     }
 }
+
+/* ---------------------------------------------------------------------------
+   页面氛围 / Page atmosphere
+   背景术语、鼠标、点击特效、回到顶部、网易云音乐
+   --------------------------------------------------------------------------- */
+
+.site-ambient {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.site-ambient canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    opacity: 0.58;
+}
+
+.container.main-container,
+.site-footer {
+    position: relative;
+    z-index: 1;
+}
+
+/* 回到顶部 / Back to top */
+.back-to-top {
+    position: fixed;
+    right: 22px;
+    bottom: 24px;
+    z-index: 80;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    color: var(--accent-color);
+    cursor: pointer;
+    visibility: hidden;
+    background: var(--card-background);
+    border: 1px solid var(--card-separator-color);
+    border-radius: 50%;
+    box-shadow: var(--shadow-l1);
+    opacity: 0;
+    transform: translateY(10px) scale(0.92);
+    transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease,
+        transform 0.25s ease,
+        color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.back-to-top.is-visible {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.back-to-top:hover {
+    color: var(--accent-color-text);
+    background: var(--accent-color);
+}
+
+.back-to-top:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 3px;
+}
+
+.back-to-top__dial {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.back-to-top__track,
+.back-to-top__progress {
+    fill: none;
+    stroke-width: 1.5;
+}
+
+.back-to-top__track {
+    stroke: var(--card-separator-color);
+}
+
+.back-to-top__progress {
+    stroke: var(--accent-color);
+    stroke-linecap: round;
+    stroke-dasharray: 125.66;
+    stroke-dashoffset: 125.66;
+    transition: stroke 0.2s ease;
+}
+
+.back-to-top:hover .back-to-top__progress {
+    stroke: var(--accent-color-text);
+}
+
+.back-to-top__arrow {
+    position: relative;
+    z-index: 1;
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* 网易云音乐 / NetEase Music */
+.music-dock {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    z-index: 80;
+    color: var(--card-text-color-main);
+    font-family: var(--base-font-family);
+}
+
+/* Keep the sidebar's language and colour-scheme controls clear of the
+   fixed music player on desktop. */
+@media (min-width: 768px) {
+    #main-menu {
+        padding-bottom: 7rem;
+    }
+}
+
+.music-dock__toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.7rem 1.1rem 0.7rem 0.7rem;
+    color: inherit;
+    cursor: pointer;
+    background: var(--card-background);
+    border: 1px solid var(--card-separator-color);
+    border-radius: 999px;
+    box-shadow: var(--shadow-l1);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.music-dock__toggle:hover {
+    background: var(--card-background);
+    box-shadow: var(--shadow-l2);
+    transform: translateY(-2px);
+}
+
+.music-dock__toggle:focus-visible,
+.music-dock__close:focus-visible,
+.music-dock__actions a:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 3px;
+}
+
+.music-dock__disc {
+    position: relative;
+    display: block;
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    background:
+        radial-gradient(circle at 50% 50%, var(--accent-color) 0 10%, transparent 11%),
+        repeating-radial-gradient(circle at 50% 50%, #20252b 0 1px, #090c10 1px 2.2px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.music-dock__disc::after {
+    position: absolute;
+    inset: 10px;
+    content: "";
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 50%;
+}
+
+.music-dock__disc-hole {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: var(--card-background);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.music-dock.is-open .music-dock__disc {
+    animation: site-disc-spin 9s linear infinite;
+}
+
+.music-dock__label {
+    max-width: 9.2rem;
+    overflow: hidden;
+    font-size: 1.35rem;
+    font-weight: 600;
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.music-dock__chevron {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: var(--card-text-color-secondary);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.2s ease;
+}
+
+.music-dock.is-open .music-dock__chevron {
+    transform: rotate(180deg);
+}
+
+.music-dock__panel {
+    position: absolute;
+    bottom: calc(100% + 0.9rem);
+    left: 0;
+    width: 330px;
+    overflow: hidden;
+    background: var(--card-background);
+    border: 1px solid var(--card-separator-color);
+    border-radius: 1.4rem;
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.18);
+    transform-origin: bottom left;
+    animation: site-dock-in 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.music-dock__panel[hidden] {
+    display: none;
+}
+
+.music-dock__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.1rem 1.2rem 0.9rem;
+    border-bottom: 1px solid var(--card-separator-color);
+}
+
+.music-dock__heading {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+}
+
+.music-dock__eyebrow {
+    overflow: hidden;
+    color: var(--card-text-color-secondary);
+    font-size: 1rem;
+    letter-spacing: 0.06em;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.music-dock__heading strong {
+    font-size: 1.35rem;
+    font-weight: 700;
+}
+
+.music-dock__actions {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.music-dock__actions a,
+.music-dock__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    color: var(--card-text-color-secondary);
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    border-radius: 50%;
+    transition:
+        color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.music-dock__actions a:hover,
+.music-dock__close:hover {
+    color: var(--accent-color);
+    background: var(--card-separator-color);
+}
+
+.music-dock__actions svg,
+.music-dock__close svg {
+    width: 15px;
+    height: 15px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.music-dock__player {
+    position: relative;
+    height: 430px;
+}
+
+.music-dock__iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: #fff;
+}
+
+.music-dock__loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+    color: var(--card-text-color-secondary);
+    font-size: 1.25rem;
+    background: var(--card-background);
+    transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
+}
+
+.music-dock.is-loaded .music-dock__loading {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.music-dock__spinner {
+    width: 26px;
+    height: 26px;
+    border: 2px solid var(--card-separator-color);
+    border-top-color: var(--accent-color);
+    border-radius: 50%;
+    animation: site-spinner-spin 0.8s linear infinite;
+}
+
+/* 自定义鼠标 / Custom cursor */
+.custom-cursor {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    pointer-events: none;
+}
+
+.custom-cursor__dot,
+.custom-cursor__ring {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    will-change: transform;
+}
+
+.custom-cursor__dot {
+    width: 6px;
+    height: 6px;
+    margin: -3px;
+    background: var(--accent-color);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.75), 0 0 16px rgba(15, 118, 110, 0.28);
+    transform: translate3d(calc(var(--cursor-x, 0) * 1px), calc(var(--cursor-y, 0) * 1px), 0) translate(-50%, -50%) scale(var(--dot-scale, 1));
+}
+
+.custom-cursor__ring {
+    width: 28px;
+    height: 28px;
+    margin: -14px;
+    border: 1px solid var(--accent-color);
+    opacity: 0.62;
+    transform: translate3d(calc(var(--ring-x, 0) * 1px), calc(var(--ring-y, 0) * 1px), 0) translate(-50%, -50%) scale(var(--ring-scale, 1));
+    transition:
+        width 0.2s ease,
+        height 0.2s ease,
+        margin 0.2s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.custom-cursor.is-hover .custom-cursor__ring {
+    width: 42px;
+    height: 42px;
+    margin: -21px;
+    background: var(--accent-color);
+    border-color: transparent;
+    opacity: 0.13;
+}
+
+.custom-cursor.is-down {
+    --dot-scale: 0.58;
+    --ring-scale: 0.86;
+}
+
+@media (pointer: fine) {
+    body.has-custom-cursor,
+    body.has-custom-cursor * {
+        cursor: none !important;
+    }
+
+    .custom-cursor {
+        display: block;
+        opacity: 0;
+        transition: opacity 0.18s ease;
+    }
+
+    .custom-cursor.is-visible {
+        opacity: 1;
+    }
+}
+
+/* 点击特效 / Click burst */
+.click-fx {
+    position: fixed;
+    z-index: 99990;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+}
+
+.click-fx__ring,
+.click-fx__spark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.click-fx__ring {
+    width: 12px;
+    height: 12px;
+    margin: -6px;
+    border: 1.5px solid var(--accent-color);
+    animation: site-click-ring 0.62s cubic-bezier(0.15, 0.65, 0.25, 1) forwards;
+}
+
+.click-fx__spark {
+    width: 4px;
+    height: 4px;
+    margin: -2px;
+    background: var(--accent-color);
+    animation: site-click-spark 0.7s cubic-bezier(0.15, 0.65, 0.25, 1) forwards;
+    animation-delay: var(--delay, 0s);
+}
+
+@keyframes site-disc-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes site-spinner-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes site-dock-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes site-click-ring {
+    0% {
+        opacity: 0.85;
+        transform: scale(0.45);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(3.6);
+    }
+}
+
+@keyframes site-click-spark {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(var(--dx), var(--dy)) scale(0.18);
+    }
+}
+
+@media (max-width: 640px) {
+    .site-ambient canvas {
+        opacity: 0.42;
+    }
+
+    .back-to-top {
+        right: 14px;
+        bottom: 16px;
+        width: 42px;
+        height: 42px;
+    }
+
+    .music-dock {
+        left: 12px;
+        bottom: 14px;
+    }
+
+    .music-dock__toggle {
+        gap: 0.7rem;
+        padding: 0.55rem 0.9rem 0.55rem 0.55rem;
+    }
+
+    .music-dock__disc {
+        width: 30px;
+        height: 30px;
+        flex-basis: 30px;
+    }
+
+    .music-dock__label {
+        max-width: 7rem;
+        font-size: 1.2rem;
+    }
+
+    .music-dock__panel {
+        width: 330px;
+        max-width: calc(100vw - 24px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .back-to-top,
+    .music-dock__toggle,
+    .music-dock__chevron,
+    .custom-cursor,
+    .custom-cursor__ring {
+        transition: none;
+    }
+
+    .music-dock.is-open .music-dock__disc {
+        animation: none;
+    }
+
+    .music-dock__panel {
+        animation: none;
+    }
+
+    .music-dock__spinner {
+        animation: none;
+    }
+
+    .click-fx {
+        display: none;
+    }
+}
