@@ -8,9 +8,18 @@
     <canvas id="term-canvas"></canvas>
 </div>
 
-<div class="custom-cursor" id="custom-cursor" aria-hidden="true">
-    <span class="custom-cursor__dot"></span>
-    <span class="custom-cursor__ring"></span>
+{{- /* Cat cursor frames: 猫标主题鼠标指针 by HappyCadogt, Linux port by Ryan (MIT). See /cursors/LICENSE. */ -}}
+<div class="custom-cursor" id="custom-cursor" aria-hidden="true"
+    data-size="96"
+    data-pointer-size="144"
+    data-text-size="112"
+    data-default-src="{{ "cursors/cat-default.webp" | relURL }}"
+    data-pointer-src="{{ "cursors/cat-pointer.webp" | relURL }}"
+    data-text-src="{{ "cursors/cat-text.webp" | relURL }}"
+    data-default-static="{{ "cursors/cat-default.png" | relURL }}"
+    data-pointer-static="{{ "cursors/cat-pointer.png" | relURL }}"
+    data-text-static="{{ "cursors/cat-text.png" | relURL }}">
+    <img class="custom-cursor__image" id="custom-cursor-image" src="{{ "cursors/cat-default.png" | relURL }}" alt="" draggable="false">
 </div>
 
 <button class="back-to-top" id="back-to-top" type="button" aria-label="{{ $backLabel }}" title="{{ $backLabel }}">

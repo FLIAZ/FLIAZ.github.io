@@ -1064,57 +1064,34 @@ html.album-lightbox-open body {
 .custom-cursor {
     display: none;
     position: fixed;
-    inset: 0;
-    z-index: 100000;
-    pointer-events: none;
-}
-
-.custom-cursor__dot,
-.custom-cursor__ring {
-    position: absolute;
     top: 0;
     left: 0;
-    border-radius: 50%;
+    z-index: 100000;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.16s ease;
     will-change: transform;
 }
 
-.custom-cursor__dot {
-    width: 6px;
-    height: 6px;
-    margin: -3px;
-    background: var(--accent-color);
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.75), 0 0 16px rgba(15, 118, 110, 0.28);
-    transform: translate3d(calc(var(--cursor-x, 0) * 1px), calc(var(--cursor-y, 0) * 1px), 0) translate(-50%, -50%) scale(var(--dot-scale, 1));
+.custom-cursor__image {
+    display: block;
+    width: var(--cursor-size, 96px);
+    height: auto;
+    user-select: none;
+    -webkit-user-drag: none;
+    filter: drop-shadow(0 3px 5px rgba(23, 33, 31, 0.18));
+    transform-origin: 50% 50%;
+    transition: transform 0.1s ease;
 }
 
-.custom-cursor__ring {
-    width: 28px;
-    height: 28px;
-    margin: -14px;
-    border: 1px solid var(--accent-color);
-    opacity: 0.62;
-    transform: translate3d(calc(var(--ring-x, 0) * 1px), calc(var(--ring-y, 0) * 1px), 0) translate(-50%, -50%) scale(var(--ring-scale, 1));
-    transition:
-        width 0.2s ease,
-        height 0.2s ease,
-        margin 0.2s ease,
-        background-color 0.2s ease,
-        border-color 0.2s ease,
-        opacity 0.2s ease;
+.custom-cursor.is-down .custom-cursor__image {
+    transform: scale(0.94);
 }
 
-.custom-cursor.is-hover .custom-cursor__ring {
-    width: 42px;
-    height: 42px;
-    margin: -21px;
-    background: var(--accent-color);
-    border-color: transparent;
-    opacity: 0.13;
-}
-
-.custom-cursor.is-down {
-    --dot-scale: 0.58;
-    --ring-scale: 0.86;
+:root[data-scheme="dark"] .custom-cursor__image {
+    filter:
+        drop-shadow(0 0 1px rgba(255, 255, 255, 0.55))
+        drop-shadow(0 3px 5px rgba(0, 0, 0, 0.35));
 }
 
 @media (pointer: fine) {
@@ -1125,8 +1102,6 @@ html.album-lightbox-open body {
 
     .custom-cursor {
         display: block;
-        opacity: 0;
-        transition: opacity 0.18s ease;
     }
 
     .custom-cursor.is-visible {
@@ -1261,7 +1236,7 @@ html.album-lightbox-open body {
     .music-dock__toggle,
     .music-dock__chevron,
     .custom-cursor,
-    .custom-cursor__ring {
+    .custom-cursor__image {
         transition: none;
     }
 

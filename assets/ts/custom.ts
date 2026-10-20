@@ -166,45 +166,112 @@
 
     function initCustomCursor() {
         const cursor = document.getElementById("custom-cursor");
-        if (!cursor) return;
+        const image = document.getElementById("custom-cursor-image");
+        if (!cursor || !(image instanceof HTMLImageElement)) return;
+        if (!finePointer.matches) return;
 
-        const enabled = () => finePointer.matches;
-        if (!enabled()) return;
+        const hotspots: Record<string, [number, number]> = {
+            default: [60, 60],
+            pointer: [60, 60],
+            text: [58, 100],
+        };
+        const sizes: Record<string, number> = {
+            default: Number(cursor.dataset.size || 96) || 96,
+            pointer: Number(cursor.dataset.pointerSize || 144) || 144,
+            text: Number(cursor.dataset.textSize || 112) || 112,
+        };
+        const sources = {
+            default: {
+                animated: cursor.dataset.defaultSrc || "",
+                static: cursor.dataset.defaultStatic || "",
+            },
+            pointer: {
+                animated: cursor.dataset.pointerSrc || "",
+                static: cursor.dataset.pointerStatic || "",
+            },
+            text: {
+                animated: cursor.dataset.textSrc || "",
+                static: cursor.dataset.textStatic || "",
+            },
+        };
+        type CursorState = keyof typeof sources;
 
+        let state: CursorState = "default";
         let x = window.innerWidth / 2;
         let y = window.innerHeight / 2;
-        let ringX = x;
-        let ringY = y;
         let hasMoved = false;
+        let failed = false;
 
-        const setPosition = () => {
-            cursor.style.setProperty("--cursor-x", `${x.toFixed(2)}`);
-            cursor.style.setProperty("--cursor-y", `${y.toFixed(2)}`);
-            cursor.style.setProperty("--ring-x", `${ringX.toFixed(2)}`);
-            cursor.style.setProperty("--ring-y", `${ringY.toFixed(2)}`);
+        const sourceFor = (next: CursorState) =>
+            reduceMotion.matches ? sources[next].static : sources[next].animated;
+
+        const setImage = (next: CursorState) => {
+            const src = sourceFor(next);
+            if (src && image.getAttribute("src") !== src) {
+                image.setAttribute("src", src);
+            }
         };
 
-        const animate = () => {
-            const easing = reduceMotion.matches ? 1 : 0.18;
-            ringX += (x - ringX) * easing;
-            ringY += (y - ringY) * easing;
-            setPosition();
-            window.requestAnimationFrame(animate);
+        const place = () => {
+            const [hotX, hotY] = hotspots[state];
+            const size = sizes[state];
+            const scale = size / 240;
+            image.style.width = `${size}px`;
+            cursor.style.transform = `translate3d(${x - hotX * scale}px, ${y - hotY * scale}px, 0)`;
         };
 
-        window.addEventListener(
+        const stateFor = (target: EventTarget | null): CursorState => {
+            if (!(target instanceof Element)) return "default";
+            if (target.closest("input, textarea, [contenteditable='true']")) return "text";
+            if (target.closest("a, button, summary, select, label, [role='button']")) {
+                return "pointer";
+            }
+            return "default";
+        };
+
+        const setState = (next: CursorState) => {
+            if (next === state) return;
+            state = next;
+            setImage(state);
+            place();
+        };
+
+        const show = () => {
+            if (!finePointer.matches || failed) return;
+            document.body.classList.add("has-custom-cursor");
+            cursor.classList.add("is-visible");
+        };
+
+        const hide = () => {
+            cursor.classList.remove("is-visible");
+            cursor.classList.remove("is-down");
+            document.body.classList.remove("has-custom-cursor");
+        };
+
+        image.addEventListener("error", () => {
+            const fallback = sources[state].static;
+            if (fallback && image.getAttribute("src") !== fallback) {
+                image.setAttribute("src", fallback);
+                return;
+            }
+            failed = true;
+            hide();
+        });
+
+        document.addEventListener(
             "pointermove",
             (event) => {
                 if (event.pointerType === "touch") return;
                 x = event.clientX;
                 y = event.clientY;
                 if (!hasMoved) {
-                    ringX = x;
-                    ringY = y;
                     hasMoved = true;
-                    document.body.classList.add("has-custom-cursor");
-                    cursor.classList.add("is-visible");
+                    show();
                 }
+                if (event.target instanceof Element) {
+                    setState(stateFor(event.target));
+                }
+                place();
             },
             { passive: true }
         );
@@ -212,32 +279,51 @@
         document.addEventListener(
             "pointerover",
             (event) => {
-                const target = event.target;
-                if (!(target instanceof Element)) return;
-                const interactive = target.closest(
-                    "a, button, summary, input, textarea, select, label, [role='button']"
-                );
-                cursor.classList.toggle("is-hover", Boolean(interactive));
+                if (hasMoved) setState(stateFor(event.target));
             },
             true
         );
 
-        document.addEventListener("pointerdown", () => cursor.classList.add("is-down"), {
-            passive: true,
-        });
+        document.addEventListener(
+            "pointerdown",
+            (event) => {
+                if (event.pointerType === "touch") {
+                    hide();
+                    return;
+                }
+                if (!failed) cursor.classList.add("is-down");
+            },
+            { passive: true }
+        );
         document.addEventListener("pointerup", () => cursor.classList.remove("is-down"), {
             passive: true,
         });
-
-        document.documentElement.addEventListener("pointerleave", () => {
-            cursor.classList.remove("is-visible");
+        document.addEventListener("pointercancel", () => cursor.classList.remove("is-down"), {
+            passive: true,
         });
+
+        document.documentElement.addEventListener("pointerleave", hide);
         document.documentElement.addEventListener("pointerenter", () => {
-            if (hasMoved) cursor.classList.add("is-visible");
+            if (hasMoved) show();
         });
-        window.addEventListener("blur", () => cursor.classList.remove("is-visible"));
+        window.addEventListener("blur", hide);
 
-        window.requestAnimationFrame(animate);
+        const refreshSource = () => setImage(state);
+        reduceMotion.addEventListener?.("change", refreshSource);
+
+        // Warm the three states so swapping on hover never shows a blank frame.
+        const preloads = new Set<string>();
+        (Object.keys(sources) as CursorState[]).forEach((key) => {
+            if (sources[key].animated) preloads.add(sources[key].animated);
+            if (sources[key].static) preloads.add(sources[key].static);
+        });
+        preloads.forEach((src) => {
+            const preload = new Image();
+            preload.src = src;
+        });
+
+        setImage(state);
+        place();
     }
 
     function initTermUniverse() {
