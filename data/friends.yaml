@@ -1,4 +1,9 @@
 - name: "Probie"
   url: "https://bprobie.github.io/Blog/"
-  avatar: "https://avatars.githubusercontent.com/u/98797734"
+  avatar: "https://bprobie.github.io/Image/Blog/logo.png"
   description: "Pwn / Java 开发 / 工具创造"
+
+- name: "Skyneon"
+  avatar: ""
+  url: "https://skyneon.github.io"
+  description: "Web、Pwn"
